@@ -2,6 +2,7 @@ package ru.stepup;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -18,7 +19,6 @@ public class PobedaHome
 
     @FindBy(css = "a[class=\"dp-1rojma8-root-root-root\"] > img")
     WebElement pageLogo;
-
 
     public PobedaHome(WebDriver driver) {
         this.driver = driver;

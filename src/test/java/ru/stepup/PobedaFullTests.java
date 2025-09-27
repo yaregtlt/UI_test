@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -20,8 +21,15 @@ public class PobedaFullTests {
     PobedaHome pagePobedaHome;
     InformationEntity informationEntity;
     FindTicketEntity findTicket;
+    BookingControlEntity bookingControlEntity;
+    BookingControlEntitySecondWindow bookingControlEntitySecondWindow;
 
     @Before
+    public void setUp() {
+        initializationDriver();
+        goToPobedaHomeCheckHeaderAndLogo();
+    }
+
     public void initializationDriver() {
         System.setProperty("webdriver.chrome.driver","C:/PerfLogs/chromedriver/chromedriver.exe");
         driver = new ChromeDriver();
@@ -29,16 +37,21 @@ public class PobedaFullTests {
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
     }
 
-    @Test
-    public void goToPobedaHomeCheckHeaderLogoAndPopUpMenu() {
+    public void goToPobedaHomeCheckHeaderAndLogo() {
         driver.get("https://pobeda.aero/");
         pagePobedaHome = new PobedaHome(driver);
-        informationEntity = new InformationEntity(driver);
         assertEquals("https://www.flypobeda.ru/", pagePobedaHome.getLoadedPageURL());
-        assertEquals("Авиакомпания «Победа» - купить авиабилеты онлайн, дешёвые билеты на самолёт, прямые и трансферные рейсы с пересадками",pagePobedaHome.getPobedaHomeTitleText());
+        assertEquals(
+                "Авиакомпания «Победа» - купить авиабилеты онлайн, дешёвые билеты на самолёт, прямые и трансферные рейсы с пересадками",
+                pagePobedaHome.getPobedaHomeTitleText());
         System.out.println("Title found");
         assertTrue(pagePobedaHome.isPobedaHomeLogoPresent());
         System.out.println("Logo is present");
+    }
+
+    @Test
+    public void goToPobedaHomeCheckHeaderLogoAndPopUpMenu() {
+        informationEntity = new InformationEntity(driver);
         informationEntity.moveToInformation();
         System.out.println("Move cursor to Information");
         assertTrue(informationEntity.isPopUpMenuPresent());
@@ -49,15 +62,8 @@ public class PobedaFullTests {
     }
 
     @Test
-    public void goToPobedaHomeAndTryToFindTicket() throws InterruptedException {
-        driver.get("https://pobeda.aero/");
-        pagePobedaHome = new PobedaHome(driver);
+    public void goToPobedaHomeAndTryToFindTicket() {
         findTicket = new FindTicketEntity(driver);
-        assertEquals("https://www.flypobeda.ru/", pagePobedaHome.getLoadedPageURL());
-        assertEquals("Авиакомпания «Победа» - купить авиабилеты онлайн, дешёвые билеты на самолёт, прямые и трансферные рейсы с пересадками",pagePobedaHome.getPobedaHomeTitleText());
-        System.out.println("Title found");
-        assertTrue(pagePobedaHome.isPobedaHomeLogoPresent());
-        System.out.println("Logo is present");
         assertTrue(findTicket.isFindTicketPresent());
         assertTrue(findTicket.isFindTicketFromFieldPresent());
         assertTrue(findTicket.isFindTicketToFieldPresent());
@@ -66,8 +72,34 @@ public class PobedaFullTests {
         findTicket.setFindTicketFromField("Москва");
         findTicket.setFindTicketToField("Санкт-Петербург");
         findTicket.clickFindTicketFindButton();
-//        Thread.sleep(5000);
         assertTrue(findTicket.isFindTicketDateThereBorderColoredWith("rgb(213, 0, 98)"));
+    }
+
+    @Test
+    public void goToPobedaHomeAndCheckBooking() throws InterruptedException {
+        wait = new WebDriverWait(driver,Duration.ofSeconds(10));
+        bookingControlEntity = new BookingControlEntity(driver);
+        bookingControlEntitySecondWindow = new BookingControlEntitySecondWindow(driver);
+        bookingControlEntity.skrollToBookingControlAndClick();
+        wait.until(ExpectedConditions.urlContains("https://www.flypobeda.ru/services/booking-management"));
+        assertEquals("https://www.flypobeda.ru/services/booking-management",
+                bookingControlEntity.getLoadedPageURL());
+        assertTrue(bookingControlEntity.isBookingControlTitlePresent());
+        assertTrue(bookingControlEntity.isOrderNumberPresent());
+        assertTrue(bookingControlEntity.isClientSurnamePresent());
+        assertTrue(bookingControlEntity.isFindButtonPresent());
+        bookingControlEntity.setOrderNumberField("XXXXXX");
+        bookingControlEntity.setClientSurnameField("Qwerty");
+        bookingControlEntity.clickFindButtonAndGoToNewWindow();
+        wait.until(ExpectedConditions.urlContains("https://ticket.flypobeda.ru/websky/?lang=ru#/search-order/XXXXXX/Qwerty"));
+        assertEquals("https://ticket.flypobeda.ru/websky/?lang=ru#/search-order/XXXXXX/Qwerty",
+                bookingControlEntity.getLoadedPageURL());
+        bookingControlEntitySecondWindow.isNumberAndSurnameFieldsPresent();
+        bookingControlEntitySecondWindow.setCheckBox();
+        bookingControlEntitySecondWindow.clickFindButton();
+        assertTrue(bookingControlEntitySecondWindow.isErrorMessagePresent());
+        assertEquals("Заказ с указанными параметрами не найден",
+                bookingControlEntitySecondWindow.getErrorMessageText());
     }
 
     @After
