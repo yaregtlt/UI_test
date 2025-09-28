@@ -3,6 +3,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 !**/src/test/java/ru/stepup/done/
+!**/src/test/java/ru/stepup/done/PikabuTest.java
+!**/src/test/java/ru/stepup/done/PobedaTest.java
+!**/src/test/java/ru/stepup/done/SimpleTest.java
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
