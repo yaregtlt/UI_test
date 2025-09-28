@@ -1,40 +1,30 @@
 package ru.stepup;
 
+import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
+import static com.codeborne.selenide.Condition.cssValue;
+import static com.codeborne.selenide.Selenide.$;
 
 public class FindTicketEntity extends PobedaHome{
-    public FindTicketEntity(WebDriver driver) {
-        super(driver);
-        PageFactory.initElements(driver,this);
-    }
 
-    @FindBy(css = "div[class=\"dp-buadeg-root-card\"]")
-    WebElement findTicketField;
+    private SelenideElement findTicketField = $("div[class=\"dp-buadeg-root-card\"]");
 
-    @FindBy(css = "div.dp-1dr6zbu-root > input.dp-zu3w2f-root-control[placeholder=\"Откуда\"]")
-    WebElement findTicketFrom;
+    private SelenideElement findTicketFrom =
+            $("div.dp-1dr6zbu-root > input.dp-zu3w2f-root-control[placeholder=\"Откуда\"]");
 
-    @FindBy(css = "div[class=\"dp-20s1up-root-suggestionName\"]")
-    WebElement findTicketFromFirstResult;
+    private SelenideElement findTicketTo =
+        $("div.dp-1dr6zbu-root > input.dp-zu3w2f-root-control[placeholder=\"Куда\"]");
 
-    @FindBy(css = "div.dp-1dr6zbu-root > input.dp-zu3w2f-root-control[placeholder=\"Куда\"]")
-    WebElement findTicketTo;
+    private SelenideElement findTicketToFirstResult = $("div[class=\"dp-20s1up-root-suggestionName\"]");
 
-    @FindBy(css = "div[class=\"dp-20s1up-root-suggestionName\"]")
-    WebElement findTicketToFirstResult;
+    SelenideElement findTicketDateThere =
+        $(By.xpath("//div[@class='dp-1dr6zbu-root' and ./input[@class='dp-zu3w2f-root-control' and @placeholder='Туда']]"));
 
-    @FindBy(xpath = "//div[@class='dp-1dr6zbu-root' and ./input[@class='dp-zu3w2f-root-control' and @placeholder='Туда']]")
-    WebElement findTicketDateThere;
+    private SelenideElement findTicketDateBack =
+        $("div.dp-1dr6zbu-root > input.dp-zu3w2f-root-control[placeholder=\"Обратно\"]");
 
-    @FindBy(css = "div.dp-1dr6zbu-root > input.dp-zu3w2f-root-control[placeholder=\"Обратно\"]")
-    WebElement findTicketDateBack;
-
-    @FindBy(css = "button[class=\"dp-k64vy3-root-root-root\"]")
-    WebElement findTicketFindButton;
+    private SelenideElement findTicketFindButton = $("button[class=\"dp-k64vy3-root-root-root\"]");
 
     public boolean isFindTicketPresent() {
         return findTicketField.isDisplayed();
@@ -62,7 +52,6 @@ public class FindTicketEntity extends PobedaHome{
         findTicketFrom.sendKeys(city);
         findTicketFrom.sendKeys(Keys.ARROW_DOWN);
         findTicketFrom.sendKeys(Keys.ENTER);
-//        findTicketFromFirstResult.click();
     }
 
     public void setFindTicketToField(String city) {
@@ -71,7 +60,6 @@ public class FindTicketEntity extends PobedaHome{
         findTicketTo.sendKeys(city);
         findTicketTo.sendKeys(Keys.ARROW_DOWN);
         findTicketTo.sendKeys(Keys.ENTER);
-//        findTicketToFirstResult.click();
     }
 
     public void clickFindTicketFindButton() {
@@ -79,6 +67,7 @@ public class FindTicketEntity extends PobedaHome{
     }
 
     public boolean isFindTicketDateThereBorderColoredWith(String color) {
+        findTicketDateThere.shouldHave(cssValue("border-color", color));
         String borderColor = findTicketDateThere.getCssValue("border-color");
         return borderColor.equals(color);
     }

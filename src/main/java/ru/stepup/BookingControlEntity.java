@@ -1,50 +1,36 @@
 package ru.stepup;
 
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import com.codeborne.selenide.SelenideElement;
 
-import java.time.Duration;
-import java.util.Set;
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.switchTo;
 
 public class BookingControlEntity extends PobedaHome{
 
-    WebDriverWait wait;
+    private SelenideElement bookingControl =
+            $("a.dp-1il0417-root-root[href='/services/booking-management']");
 
-    public BookingControlEntity(WebDriver driver) {
-        super(driver);
-        PageFactory.initElements(driver,this);
-    }
+    private SelenideElement bookingTitle = $("h1[class=\"dp-1dsqh26-root\"]");
 
-    @FindBy(css = "a.dp-1il0417-root-root[href='/services/booking-management']")
-    WebElement bookingControl;
+    private SelenideElement clientSurnameField =
+            $("input.dp-zu3w2f-root-control[placeholder=\"Фамилия клиента\"]");
 
-    @FindBy(css = "h1[class=\"dp-1dsqh26-root\"]")
-    WebElement bookingTitle;
+    private SelenideElement orderNumberField =
+        $("input.dp-zu3w2f-root-control[placeholder=\"Номер бронирования или билета\"]");
 
-    @FindBy(css = "input.dp-zu3w2f-root-control[placeholder=\"Фамилия клиента\"]")
-    WebElement clientSurnameField;
-
-    @FindBy(css = "input.dp-zu3w2f-root-control[placeholder=\"Номер бронирования или билета\"]")
-    WebElement orderNumberField;
-
-    @FindBy(css = "button[class=\"dp-18h4yts-root-root-submitBtn\"]")
-    WebElement findButton;
+    private SelenideElement findButton = $("button[class=\"dp-18h4yts-root-root-submitBtn\"]");
 
     public void skrollToBookingControlAndClick() {
-        Actions actions = new Actions(driver);
-        actions.keyDown(Keys.CONTROL).sendKeys(Keys.END).keyUp(Keys.CONTROL).perform();
+        bookingControl.scrollIntoView(true);
         bookingControl.click();
+        bookingTitle.shouldBe(visible);
     }
 
-    public boolean isBookingControlTitlePresent() {
-        return bookingTitle.isDisplayed();
-    }
+//    public boolean isBookingControlTitlePresent() {
+//        bookingTitle.shouldBe(visible);
+//        return bookingTitle.isDisplayed();
+//    }
 
     public boolean isOrderNumberPresent() {
         return orderNumberField.isDisplayed();
@@ -67,17 +53,8 @@ public class BookingControlEntity extends PobedaHome{
     }
 
     public void clickFindButtonAndGoToNewWindow() {
-        String originalWindow = driver.getWindowHandle();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         findButton.click();
-        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-        Set<String> allWindows = driver.getWindowHandles();
-        for (String windowHandle : allWindows) {
-            if (!windowHandle.equals(originalWindow)) {
-                driver.switchTo().window(windowHandle);
-                break;
-            }
-        }
+        switchTo().window(1);
     }
 
 }

@@ -1,46 +1,32 @@
 package ru.stepup;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
 
-import java.time.Duration;
+import static com.codeborne.selenide.Selenide.$;
 
 public class InformationEntity extends PobedaHome{
 
-    @FindBy(xpath = "//a[contains(@class, 'dp-1g2i3b6-root-root-root') and text()='Информация']")
-    WebElement informationMenu;
+    private SelenideElement informationMenu =
+        $(By.xpath("//a[contains(@class, 'dp-1g2i3b6-root-root-root') and text()='Информация']"));
 
-    @FindBy(css = "div[class=\"dp-1mbpq22-root\"]")
-    WebElement popupMenu;
+    private SelenideElement popupMenu = $("div[class=\"dp-1mbpq22-root\"]");
 
-    @FindBy(xpath = "//a[contains(@class, 'dp-17i9q9s-root-root') and text()='Подготовка к полёту']")
-    WebElement popupHeaderFlightPreparation;
+    private SelenideElement popupHeaderFlightPreparation =
+        $(By.xpath("//a[contains(@class, 'dp-17i9q9s-root-root') and text()='Подготовка к полёту']"));
 
-    @FindBy(xpath = "//a[contains(@class, 'dp-17i9q9s-root-root') and text()='Полезная информация']")
-    WebElement popupHeaderUsefulInfo;
+    private SelenideElement popupHeaderUsefulInfo =
+        $(By.xpath("//a[contains(@class, 'dp-17i9q9s-root-root') and text()='Полезная информация']"));
 
-    @FindBy(xpath = "//a[contains(@class, 'dp-17i9q9s-root-root') and text()='О компании']")
-    WebElement popupHeaderAbout;
-
-    public InformationEntity(WebDriver driver) {
-        super(driver);
-        PageFactory.initElements(driver,this);
-    }
+      private SelenideElement popupHeaderAbout =
+        $(By.xpath("//a[contains(@class, 'dp-17i9q9s-root-root') and text()='О компании']"));
 
     public void moveToInformation() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-        wait.until(ExpectedConditions.visibilityOf(this.informationMenu));
-        Actions actions = new Actions(driver);
-        actions.moveToElement(informationMenu).perform();
+        informationMenu.hover();
     }
 
     public boolean isPopUpMenuPresent() {
-        return this.popupMenu.isDisplayed();
+        return popupMenu.isDisplayed();
     }
 
     public String getPobedaHomePopupHeaderFlightPreparation() {

@@ -1,41 +1,25 @@
 package ru.stepup;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
+import com.codeborne.selenide.SelenideElement;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.WebDriverRunner.url;
 
 public class PobedaHome
 {
-    WebDriver driver;
 
-    @FindBy(css = "meta[property=\"og:title\"]")
-    WebElement pageHeader;
+    private SelenideElement pageHeader = $("meta[property=\"og:title\"]");
 
-    @FindBy(css = "a[class=\"dp-1rojma8-root-root-root\"] > img")
-    WebElement pageLogo;
-
-    public PobedaHome(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver,this);
-    }
+    private SelenideElement pageLogo = $("a[class=\"dp-1rojma8-root-root-root\"] > img");
 
     public String getLoadedPageURL() {
-        return driver.getCurrentUrl();
+        return url();
     }
 
     public String getPobedaHomeTitleText() {
-        return pageHeader.getAttribute("content");
+        return pageHeader.attr("content");
     }
 
     public boolean isPobedaHomeLogoPresent() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(100));
-        wait.until(ExpectedConditions.visibilityOf(this.pageLogo));
         return pageLogo.isDisplayed();
     }
 

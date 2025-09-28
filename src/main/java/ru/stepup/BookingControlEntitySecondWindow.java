@@ -1,32 +1,24 @@
 package ru.stepup;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
+import com.codeborne.selenide.SelenideElement;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
 
 public class BookingControlEntitySecondWindow extends BookingControlEntity{
-    public BookingControlEntitySecondWindow(WebDriver driver) {
-        super(driver);
-        PageFactory.initElements(driver,this);
-    }
 
-    @FindBy(css = "[placeholder=\"Номер брони или билета\"]")
-    WebElement bookingNumberField;
+    private SelenideElement bookingNumberField = $("[placeholder=\"Номер брони или билета\"]");
 
-    @FindBy(css = "[placeholder=\"Фамилия\"]")
-    WebElement surnameField;
+    private SelenideElement surnameField = $("[placeholder=\"Фамилия\"]");
 
-    @FindBy(css = "[ng-bind-html=\"'web.searchOrderAgree' | aliasStatic\"]")
-    WebElement agreeCheckBox;
+    private SelenideElement agreeCheckBox = $("[ng-bind-html=\"'web.searchOrderAgree' | aliasStatic\"]");
 
-    @FindBy(css = "[class=\"btn btn_search btn_search--order btn_formSearch btn_formSearch_js\"]")
-    WebElement findButton;
+    private SelenideElement findButton =
+        $("[class=\"btn btn_search btn_search--order btn_formSearch btn_formSearch_js\"]");
 
-    @FindBy(css = "[ng-if=\"vm.errorMessage\"]")
-    WebElement errorMessage;
+    private SelenideElement errorMessage = $("[ng-if=\"vm.errorMessage\"]");
 
     public boolean isNumberAndSurnameFieldsPresent() {
+        bookingNumberField.shouldBe(visible);
         return bookingNumberField.isDisplayed() && surnameField.isDisplayed();
     }
 
