@@ -1,6 +1,7 @@
 package ru.stepup;
 
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -25,18 +26,22 @@ public class InformationEntity extends PobedaHome{
         informationMenu.hover();
     }
 
+    @Step("Проверить, что выподающее меню отобразилось")
     public boolean isPopUpMenuPresent() {
         return popupMenu.isDisplayed();
     }
 
+    @Step("В выподающем меню присутствует \"Подготовка к полёту\"")
     public String getPobedaHomePopupHeaderFlightPreparation() {
         return this.popupHeaderFlightPreparation.getText();
     }
 
+    @Step("В выподающем меню присутствует \"Полезная информация\"")
     public String getPobedaHomePopupHeaderUsefulInfo() {
         return this.popupHeaderUsefulInfo.getText();
     }
 
+    @Step("В выподающем меню присутствует \"О компании\"")
     public String getPobedaHomePopupHeaderAbout() {
         return popupHeaderAbout.getText();
     }

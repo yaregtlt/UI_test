@@ -1,6 +1,8 @@
 package ru.stepup;
 
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
+
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
@@ -17,23 +19,28 @@ public class BookingControlEntitySecondWindow extends BookingControlEntity{
 
     private SelenideElement errorMessage = $("[ng-if=\"vm.errorMessage\"]");
 
+    @Step("Присутствует поле Номер заказа и Фамилия в новом окне")
     public boolean isNumberAndSurnameFieldsPresent() {
         bookingNumberField.shouldBe(visible);
         return bookingNumberField.isDisplayed() && surnameField.isDisplayed();
     }
 
+    @Step("Установить check box")
     public void setCheckBox() {
         agreeCheckBox.click();
     }
 
+    @Step("Кликнуть кнопку Найти")
     public void clickFindButton() {
         findButton.click();
     }
 
+    @Step("Появилось сообщение об ошибке")
     public boolean isErrorMessagePresent() {
         return errorMessage.isDisplayed();
     }
 
+    @Step("Сообщение об ошибке соответствует тексту: \"Заказ с указанными параметрами не найден\"")
     public String getErrorMessageText() {
         return errorMessage.getText();
     }

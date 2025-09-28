@@ -1,6 +1,7 @@
 package ru.stepup;
 
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
@@ -27,31 +28,32 @@ public class BookingControlEntity extends PobedaHome{
         bookingTitle.shouldBe(visible);
     }
 
-//    public boolean isBookingControlTitlePresent() {
-//        bookingTitle.shouldBe(visible);
-//        return bookingTitle.isDisplayed();
-//    }
-
+    @Step("Присутствует поле Номер заказа")
     public boolean isOrderNumberPresent() {
         return orderNumberField.isDisplayed();
     }
 
+    @Step("Присутствует поле Фамилия")
     public boolean isClientSurnamePresent() {
         return clientSurnameField.isDisplayed();
     }
 
+    @Step("Присутствует кнопка Найти")
     public boolean isFindButtonPresent() {
         return findButton.isDisplayed();
     }
 
+    @Step("Установить значение в поле Номер заказа")
     public void setOrderNumberField(String text) {
         orderNumberField.sendKeys(text);
     }
 
+    @Step("Установить значение в поле Фамилия")
     public void setClientSurnameField(String text) {
         clientSurnameField.sendKeys(text);
     }
 
+    @Step("Нажать кнопку Найти")
     public void clickFindButtonAndGoToNewWindow() {
         findButton.click();
         switchTo().window(1);

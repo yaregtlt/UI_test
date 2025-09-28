@@ -1,6 +1,7 @@
 package ru.stepup;
 
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import static com.codeborne.selenide.Condition.cssValue;
@@ -26,26 +27,32 @@ public class FindTicketEntity extends PobedaHome{
 
     private SelenideElement findTicketFindButton = $("button[class=\"dp-k64vy3-root-root-root\"]");
 
+    @Step("Проверить, присутствие блока \"Найти билет\"")
     public boolean isFindTicketPresent() {
         return findTicketField.isDisplayed();
     }
 
+    @Step("Присутствует поле \"Откуда\"")
     public boolean isFindTicketFromFieldPresent() {
         return findTicketFrom.isDisplayed();
     }
 
+    @Step("Присутствует поле \"Куда\"")
     public boolean isFindTicketToFieldPresent() {
         return findTicketTo.isDisplayed();
     }
 
+    @Step("Присутствует поле \"Туда\"")
     public boolean isFindTicketDateTherePresent() {
         return findTicketDateThere.isDisplayed();
     }
 
+    @Step("Присутствует поле \"Обратно\"")
     public boolean isFindTicketDateBackPresent() {
         return findTicketDateBack.isDisplayed();
     }
 
+    @Step("Ввести в поле Откуда слово Москва")
     public void setFindTicketFromField(String city) {
         findTicketFrom.sendKeys(Keys.CONTROL + "a");
         findTicketFrom.sendKeys(Keys.DELETE);
@@ -54,6 +61,7 @@ public class FindTicketEntity extends PobedaHome{
         findTicketFrom.sendKeys(Keys.ENTER);
     }
 
+    @Step("Ввести в поле Куда слово Санкт-Петербург")
     public void setFindTicketToField(String city) {
         findTicketTo.sendKeys(Keys.CONTROL + "a");
         findTicketTo.sendKeys(Keys.DELETE);
@@ -62,10 +70,12 @@ public class FindTicketEntity extends PobedaHome{
         findTicketTo.sendKeys(Keys.ENTER);
     }
 
+    @Step("Кликнуть кнопку Найти")
     public void clickFindTicketFindButton() {
         findTicketFindButton.click();
     }
 
+    @Step("Проверить, что поле Туда обрамилось красной рамкой")
     public boolean isFindTicketDateThereBorderColoredWith(String color) {
         findTicketDateThere.shouldHave(cssValue("border-color", color));
         String borderColor = findTicketDateThere.getCssValue("border-color");
